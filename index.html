@@ -1,0 +1,67 @@
+from pathlib import Path
+p = Path("/mnt/data/little_surprise")
+p.mkdir(exist_ok=True)
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Surprise 💗</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#552044;background:linear-gradient(135deg,#ffe1ef,#eee2ff,#fff0f5);overflow-x:hidden}
+.wrap{width:min(720px,92%);margin:36px auto;padding:28px 22px;text-align:center;background:#ffffffd9;border:1px solid #fff;border-radius:28px;box-shadow:0 18px 55px #9b5b8930}
+.tag{display:inline-block;padding:7px 14px;border-radius:30px;background:#ffe2f0;color:#a12d69;font-size:13px;letter-spacing:.4px}
+h1{font-size:clamp(30px,7vw,48px);margin:18px 0 8px;color:#a12d69}.sub{color:#80536e;line-height:1.7}
+.heart{font-size:54px;animation:pulse 1.4s infinite}@keyframes pulse{50%{transform:scale(1.18)}}
+button{border:0;border-radius:30px;padding:14px 24px;margin:18px 6px;background:linear-gradient(100deg,#e84d94,#9864df);color:white;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px #d36aa34a}
+button:hover{transform:translateY(-2px)}#letter{display:none;text-align:left;white-space:pre-wrap;line-height:1.9;font-size:16px;background:#fff7fb;border:1px solid #f8d6e8;border-radius:20px;padding:20px;margin-top:18px}
+.end{font-weight:800;text-align:center;color:#ad3978;font-size:20px;margin-top:20px}
+footer{font-size:12px;color:#9b7890;margin-top:24px}
+.float{position:fixed;bottom:-30px;pointer-events:none;animation:rise 7s linear infinite;opacity:.65}@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <span class="tag">A LITTLE SURPRISE • MADE WITH LOVE</span>
+  <div class="heart">💗</div>
+  <h1>Hey, My Favourite Person! ❤️‍🩹</h1>
+  <p class="sub">Unakkaga oru chinna surprise…<br>Open pannip paaru, thangapulla! 🫶</p>
+  <button id="openBtn" onclick="openLetter()">Tap to open your surprise 💌</button>
+  <section id="letter"></section>
+  <div class="end" id="ending" hidden>Miss you dii partner 😖💎🖇️🫶</div>
+  <footer>One little page, lots of memories ✨</footer>
+</main>
+<script>
+const message = `Nee Ennada favourite person ❤️‍🩹 nee enakku kedachcha oru gift 💎 and naa un kooda pesama irunthalum unna nenaikkama oru naalum irunthathu illa.
+
+Unnoda pesanum, rompa memories ahh create pannanum, unkitta rompa visiyam share pannanum apadinulam enakku asai. Ana nee en kooda pesa matikka… nee enkooda pesu pls 😞
+
+Nee ennoda everything, uyireee, thangapulla ❤️‍🩹, mine, bestie, soulmate, korangu, partner ellame neethan dii thangapulla ❤️‍🩹
+
+Unna thavira vera yarayum ippadi nickname vachu kupdathilla. Unna than first ippadi koopduren, and un number than ippadi nickname vachu save pannirukken dii uyireee 💎🖇️🫶
+
+Mukkiyama neethan dii ennoda partner. En manasula nee irukkura place yarayum vachu ennala nenachu pakka mudiyala dii thangoo.
+
+Nee eppavum en kooda pesanum. Naa pesama iruntha enna adi, sanda podu, thittu… enna naalum pannu. Ana en kooda pesama mattum irukkatha diii korangeyyy 🐒
+
+Miss you dii partner 😖`;
+function openLetter(){
+ const box=document.getElementById('letter');
+ box.textContent=message; box.style.display='block';
+ document.getElementById('ending').hidden=false;
+ document.getElementById('openBtn').textContent='Surprise opened 💗';
+ document.getElementById('openBtn').disabled=true;
+}
+for(let i=0;i<16;i++){
+ const e=document.createElement('div');e.className='float';e.textContent=['💗','✨','💕','💖'][i%4];
+ e.style.left=(Math.random()*100)+'%';e.style.animationDelay=(Math.random()*7)+'s';e.style.fontSize=(16+Math.random()*20)+'px';document.body.appendChild(e);
+}
+</script>
+</body>
+</html>'''
+(p/"index.html").write_text(html, encoding="utf-8")
+import zipfile
+zpath=Path("/mnt/data/little_surprise_website.zip")
+with zipfile.ZipFile(zpath,"w",zipfile.ZIP_DEFLATED) as z:
+    z.write(p/"index.html","little-surprise/index.html")
+print(zpath, (p/"index.html").stat().st_size)
